@@ -9,6 +9,7 @@ export default function DashboardPage() {
   const [isDone, setIsDone] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -27,6 +28,7 @@ export default function DashboardPage() {
       setFile(e.dataTransfer.files[0]);
       setIsDone(false);
       setDownloadUrl(null);
+      setError(null);
     }
   };
 
@@ -35,6 +37,7 @@ export default function DashboardPage() {
       setFile(e.target.files[0]);
       setIsDone(false);
       setDownloadUrl(null);
+      setError(null);
     }
   };
 
@@ -46,8 +49,10 @@ export default function DashboardPage() {
     formData.append('file', file);
     formData.append('target_format', targetFormat);
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
     try {
-      const response = await fetch('http://localhost:3000/api/conversions', {
+      const response = await fetch(`${API_URL}/api/conversions`, {
         method: 'POST',
         body: formData,
       });
@@ -57,11 +62,11 @@ export default function DashboardPage() {
         setDownloadUrl(data.download_url);
         setIsDone(true);
       } else {
-        alert('Conversion failed. Please try again.');
+        setError('Conversion failed. Please try again.');
       }
-    } catch (error) {
-      console.error(error);
-      alert('Network error trying to reach the API.');
+    } catch (err) {
+      console.error(err);
+      setError('Network error: Unable to connect to the backend API.');
     } finally {
       setIsConverting(false);
     }
@@ -84,6 +89,19 @@ export default function DashboardPage() {
         <h1 className="text-4xl font-bold mb-3 text-white">Convert your file</h1>
         <p className="text-slate-400">Fast, secure, and high-quality document conversions.</p>
       </div>
+
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-center font-medium shadow-lg shadow-red-500/5"
+          >
+            {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence mode="wait">
         {!isDone ? (
