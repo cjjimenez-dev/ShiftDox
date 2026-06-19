@@ -7,9 +7,9 @@ import './index.css';
 function App() {
   return (
     <Router>
-      <div className="app-container">
+      <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="main-content">
+        <main className="flex-1 flex justify-center items-center p-8">
           <Routes>
             <Route path="/" element={<AuthPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
