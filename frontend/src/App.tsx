@@ -4,20 +4,27 @@ import HomePage from './pages/HomePage';
 import ConverterPage from './pages/ConverterPage';
 import './index.css';
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { AuthProvider } from './context/AuthContext';
+
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-1 flex justify-center items-center p-8">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/tool/:id" element={<ConverterPage />} />
-            <Route path="*" element={<HomePage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID"}>
+      <AuthProvider>
+        <Router>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-1 flex justify-center items-center">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/tool/:id" element={<ConverterPage />} />
+                <Route path="*" element={<HomePage />} />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }
 
