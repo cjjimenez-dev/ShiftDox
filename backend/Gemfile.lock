@@ -381,9 +381,9 @@ DEPENDENCIES
   bootsnap
   brakeman
   bundler-audit
-  cloudconvert
+  cloudconvert (~> 1.0)
   debug
-  dotenv-rails
+  dotenv-rails (~> 3.2)
   image_processing (~> 1.2)
   kamal
   puma (>= 5.0)
