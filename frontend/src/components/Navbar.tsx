@@ -1,13 +1,7 @@
-import { FileDown, LogOut } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { FileDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const isAuthPage = location.pathname === '/';
-
   return (
     <motion.nav 
       initial={{ y: -50, opacity: 0 }}
@@ -22,19 +16,6 @@ export default function Navbar() {
           ShiftDox
         </span>
       </div>
-      
-      {!isAuthPage && (
-        <div className="flex items-center gap-6">
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-secondary !py-2 !px-4 !w-auto text-sm"
-            onClick={() => navigate('/')}
-          >
-            <LogOut size={16} /> Exit
-          </motion.button>
-        </div>
-      )}
     </motion.nav>
   );
 }

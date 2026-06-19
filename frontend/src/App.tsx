@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
 import './index.css';
 
@@ -11,8 +10,7 @@ function App() {
         <Navbar />
         <main className="flex-1 flex justify-center items-center p-8">
           <Routes>
-            <Route path="/" element={<AuthPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="*" element={<DashboardPage />} />
           </Routes>
         </main>
       </div>
