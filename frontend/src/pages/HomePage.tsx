@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { FileText, FileSpreadsheet, Presentation, FileImage, Image as ImageIcon } from 'lucide-react';
 
 const TOOLS = [
-  { id: 'pdf-to-word', title: 'PDF to Word', desc: 'Convert PDF files to editable Word documents.', icon: <FileText size={32} className="text-blue-400" /> },
-  { id: 'word-to-pdf', title: 'Word to PDF', desc: 'Convert Word documents to PDF files.', icon: <FileText size={32} className="text-purple-400" /> },
-  { id: 'pdf-to-excel', title: 'PDF to Excel', desc: 'Extract spreadsheet data from PDFs to Excel.', icon: <FileSpreadsheet size={32} className="text-emerald-400" /> },
-  { id: 'excel-to-pdf', title: 'Excel to PDF', desc: 'Convert Excel spreadsheets to PDF documents.', icon: <FileSpreadsheet size={32} className="text-teal-400" /> },
-  { id: 'pdf-to-powerpoint', title: 'PDF to PowerPoint', desc: 'Turn your PDF files into easy to edit PPT slideshows.', icon: <Presentation size={32} className="text-orange-400" /> },
-  { id: 'powerpoint-to-pdf', title: 'PowerPoint to PDF', desc: 'Make PPT slideshows easy to view by converting them to PDF.', icon: <Presentation size={32} className="text-red-400" /> },
-  { id: 'pdf-to-jpg', title: 'PDF to JPG', desc: 'Convert each PDF page into a JPG image.', icon: <FileImage size={32} className="text-yellow-400" /> },
-  { id: 'jpg-to-pdf', title: 'JPG to PDF', desc: 'Convert JPG images to PDF documents.', icon: <ImageIcon size={32} className="text-amber-400" /> },
+  { id: 'pdf-to-word', title: 'PDF to Word', desc: 'Transform your PDFs into fully editable Word documents in seconds.', icon: <FileText size={32} className="text-blue-400" /> },
+  { id: 'word-to-pdf', title: 'Word to PDF', desc: 'Securely convert your Word documents into universally compatible PDF format.', icon: <FileText size={32} className="text-purple-400" /> },
+  { id: 'pdf-to-excel', title: 'PDF to Excel', desc: 'Pull tables and data directly from PDFs into formatted Excel sheets.', icon: <FileSpreadsheet size={32} className="text-emerald-400" /> },
+  { id: 'excel-to-pdf', title: 'Excel to PDF', desc: 'Turn complex Excel spreadsheets into clean, read-only PDF documents.', icon: <FileSpreadsheet size={32} className="text-teal-400" /> },
+  { id: 'pdf-to-powerpoint', title: 'PDF to PowerPoint', desc: 'Extract presentations from PDFs into editable PowerPoint slides.', icon: <Presentation size={32} className="text-orange-400" /> },
+  { id: 'powerpoint-to-pdf', title: 'PowerPoint to PDF', desc: 'Save your PowerPoint slideshows as static, easy-to-share PDF files.', icon: <Presentation size={32} className="text-red-400" /> },
+  { id: 'pdf-to-jpg', title: 'PDF to JPG', desc: 'Extract high-quality JPG image files directly from your PDF pages.', icon: <FileImage size={32} className="text-yellow-400" /> },
+  { id: 'jpg-to-pdf', title: 'JPG to PDF', desc: 'Combine multiple JPG images into a single, organized PDF document.', icon: <ImageIcon size={32} className="text-amber-400" /> },
 ];
 
 export default function HomePage() {
@@ -19,9 +19,9 @@ export default function HomePage() {
   return (
     <div className="w-full max-w-7xl mx-auto py-8">
       <div className="text-center mb-16">
-        <h1 className="text-5xl font-extrabold mb-6 text-white tracking-tight">Every tool you need to work with PDFs</h1>
+        <h1 className="text-5xl font-extrabold mb-6 text-white tracking-tight">Your Ultimate Document Conversion Suite</h1>
         <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-          All are 100% FREE and easy to use! Merge, split, compress, convert, rotate, unlock and watermark PDFs with just a few clicks.
+          Experience lightning-fast, highly secure, and completely free document transformations. Switch effortlessly between PDFs, Word documents, Excel sheets, and images.
         </p>
       </div>
 
