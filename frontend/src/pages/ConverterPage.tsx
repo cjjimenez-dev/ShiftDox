@@ -65,10 +65,8 @@ export default function ConverterPage() {
     formData.append('file', file);
     formData.append('target_format', tool.targetFormat);
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
     try {
-      const response = await fetch(`${API_URL}/api/conversions`, {
+      const response = await fetch(`/api/conversions`, {
         method: 'POST',
         body: formData,
       });
