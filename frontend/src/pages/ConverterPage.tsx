@@ -1,10 +1,25 @@
 import { useState } from 'react';
-import { UploadCloud, ArrowRight, Download, CheckCircle2 } from 'lucide-react';
+import { UploadCloud, ArrowRight, Download, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useParams, useNavigate } from 'react-router-dom';
 
-export default function DashboardPage() {
+const TOOLS: Record<string, { title: string, desc: string, targetFormat: string, accept: string }> = {
+  'pdf-to-word': { title: 'PDF to Word', desc: 'Convert PDF files to editable Word documents.', targetFormat: 'docx', accept: '.pdf' },
+  'word-to-pdf': { title: 'Word to PDF', desc: 'Convert Word documents to PDF files.', targetFormat: 'pdf', accept: '.doc,.docx' },
+  'pdf-to-excel': { title: 'PDF to Excel', desc: 'Extract spreadsheet data from PDFs to Excel.', targetFormat: 'xlsx', accept: '.pdf' },
+  'excel-to-pdf': { title: 'Excel to PDF', desc: 'Convert Excel spreadsheets to PDF documents.', targetFormat: 'pdf', accept: '.xls,.xlsx' },
+  'pdf-to-powerpoint': { title: 'PDF to PowerPoint', desc: 'Turn your PDF files into easy to edit PPT and PPTX slideshows.', targetFormat: 'pptx', accept: '.pdf' },
+  'powerpoint-to-pdf': { title: 'PowerPoint to PDF', desc: 'Make PPT and PPTX slideshows easy to view by converting them to PDF.', targetFormat: 'pdf', accept: '.ppt,.pptx' },
+  'pdf-to-jpg': { title: 'PDF to JPG', desc: 'Convert each PDF page into a JPG.', targetFormat: 'jpg', accept: '.pdf' },
+  'jpg-to-pdf': { title: 'JPG to PDF', desc: 'Convert JPG images to PDF.', targetFormat: 'pdf', accept: '.jpg,.jpeg,.png' },
+};
+
+export default function ConverterPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const tool = id && TOOLS[id] ? TOOLS[id] : TOOLS['pdf-to-word'];
+
   const [file, setFile] = useState<File | null>(null);
-  const [targetFormat, setTargetFormat] = useState('pdf');
   const [isConverting, setIsConverting] = useState(false);
   const [isDone, setIsDone] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -44,10 +59,11 @@ export default function DashboardPage() {
   const handleConvert = async () => {
     if (!file) return;
     setIsConverting(true);
+    setError(null);
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('target_format', targetFormat);
+    formData.append('target_format', tool.targetFormat);
 
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -62,7 +78,8 @@ export default function DashboardPage() {
         setDownloadUrl(data.download_url);
         setIsDone(true);
       } else {
-        setError('Conversion failed. Please try again.');
+        const errData = await response.json().catch(() => null);
+        setError(errData?.error || 'Conversion failed. Please try again.');
       }
     } catch (err) {
       console.error(err);
@@ -83,11 +100,18 @@ export default function DashboardPage() {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4 }}
-      className="w-full max-w-[900px] glass-panel p-10"
+      className="w-full max-w-[900px] glass-panel p-10 relative"
     >
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold mb-3 text-white">Convert your file</h1>
-        <p className="text-slate-400">Fast, secure, and high-quality document conversions.</p>
+      <button 
+        onClick={() => navigate('/')}
+        className="absolute top-6 left-6 text-slate-400 hover:text-white flex items-center gap-2 transition-colors"
+      >
+        <ArrowLeft size={20} /> Back
+      </button>
+
+      <div className="text-center mb-10 mt-4">
+        <h1 className="text-4xl font-bold mb-3 text-white">{tool.title}</h1>
+        <p className="text-slate-400">{tool.desc}</p>
       </div>
 
       <AnimatePresence>
@@ -118,7 +142,7 @@ export default function DashboardPage() {
                 borderColor: isDragging ? '#3b82f6' : 'rgba(59, 130, 246, 0.4)',
                 backgroundColor: isDragging ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)'
               }}
-              className="w-full border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-colors"
+              className="w-full border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-colors relative"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleFileDrop}
@@ -126,6 +150,7 @@ export default function DashboardPage() {
               <input 
                 type="file" 
                 className="hidden" 
+                accept={tool.accept}
                 onChange={handleFileInput}
               />
               <motion.div
@@ -134,10 +159,10 @@ export default function DashboardPage() {
                 <UploadCloud size={72} className="text-blue-500 mx-auto mb-6" />
               </motion.div>
               <h3 className="text-2xl font-semibold mb-2 text-white">
-                {file ? file.name : 'Drag & Drop your file here'}
+                {file ? file.name : 'Select or drop file'}
               </h3>
               <p className="text-slate-400">
-                {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : 'or click to browse from your computer'}
+                {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : `Accepts ${tool.accept.toUpperCase()} files`}
               </p>
             </motion.label>
 
@@ -147,29 +172,15 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col sm:flex-row gap-6 items-center justify-center mt-10 w-full"
               >
-                <div className="flex items-center gap-4 bg-slate-900/50 p-2 rounded-xl border border-white/5">
-                  <span className="font-medium text-slate-400 pl-4">Convert to:</span>
-                  <select 
-                    className="bg-slate-800 text-white font-medium py-3 px-4 outline-none rounded-lg cursor-pointer border border-white/10 hover:border-blue-500/50 transition-colors" 
-                    value={targetFormat} 
-                    onChange={(e) => setTargetFormat(e.target.value)}
-                  >
-                    <option value="pdf">PDF Document (.pdf)</option>
-                    <option value="docx">Word Document (.docx)</option>
-                    <option value="txt">Text File (.txt)</option>
-                    <option value="jpg">Image (.jpg)</option>
-                  </select>
-                </div>
-
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="btn btn-primary !w-auto !px-8"
+                  className="btn btn-primary !w-auto !px-8 text-lg"
                   onClick={handleConvert}
                   disabled={isConverting}
                 >
-                  {isConverting ? 'Converting...' : 'Convert Now'} 
-                  {!isConverting && <ArrowRight size={20} />}
+                  {isConverting ? 'Converting...' : `Convert to ${tool.targetFormat.toUpperCase()}`} 
+                  {!isConverting && <ArrowRight size={24} />}
                 </motion.button>
               </motion.div>
             )}
@@ -190,7 +201,7 @@ export default function DashboardPage() {
             </motion.div>
             <h2 className="text-3xl font-bold mb-3 text-white">Conversion Complete!</h2>
             <p className="text-slate-400 mb-10 text-lg">
-              Your file has been successfully converted to {targetFormat.toUpperCase()}.
+              Your file has been successfully converted to {tool.targetFormat.toUpperCase()}.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

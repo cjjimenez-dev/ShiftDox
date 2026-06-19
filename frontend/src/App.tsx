@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import DashboardPage from './pages/DashboardPage';
+import HomePage from './pages/HomePage';
+import ConverterPage from './pages/ConverterPage';
 import './index.css';
 
 function App() {
@@ -10,7 +11,9 @@ function App() {
         <Navbar />
         <main className="flex-1 flex justify-center items-center p-8">
           <Routes>
-            <Route path="*" element={<DashboardPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/tool/:id" element={<ConverterPage />} />
+            <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
       </div>
