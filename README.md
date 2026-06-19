@@ -29,6 +29,10 @@ npm run dev
 ### Running the Backend
 ```bash
 cd backend
-bundle install
+
+# If your terminal recognizes Rails:
 rails server
+
+# If you get "rails is not recognized" on Windows:
+C:\Ruby40-x64\bin\ruby.exe bin\rails server
 ```
