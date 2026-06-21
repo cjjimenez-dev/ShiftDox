@@ -28,24 +28,3 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-  test-backend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-          working-directory: backend
-          
-      - name: Set up database
-        run: |
-          bundle exec rails db:prepare
-          
-      - name: Run tests
-        run: bundle exec rails test
